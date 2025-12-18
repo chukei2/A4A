@@ -1,0 +1,52 @@
+name: Auto Release
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Bump version
+        id: bump_version
+        run: |
+          # Get current version
+          CURRENT_VERSION=$(grep '^version =' pyproject.toml | cut -d '"' -f 2)
+          echo "Current version: $CURRENT_VERSION"
+          
+          # Increment patch version (last digit)
+          NEW_VERSION=$(python3 -c "v = '$CURRENT_VERSION'.split('.'); v[-1] = str(int(v[-1]) + 1); print('.'.join(v))")
+          echo "New version: $NEW_VERSION"
+          
+          # Update pyproject.toml
+          sed -i 's/^version = "'$CURRENT_VERSION'"/version = "'$NEW_VERSION'"/' pyproject.toml
+          
+          echo "VERSION=$NEW_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add pyproject.toml
+          git commit -m "chore: bump version to ${{ steps.bump_version.outputs.VERSION }} [skip ci]"
+          git push
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.bump_version.outputs.VERSION }}
+          generate_release_notes: true
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
