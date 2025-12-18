@@ -280,8 +280,28 @@ uv run agent_4_agent/query.py
 
 1.  **ユーザーの要望の確認**: エージェントを作成したいというユーザーの初期の要望を理解します。
 2.  **要件の明確化**: 不明確な点があれば質問し、エージェントの名前 (agent_name)、目的 (goal)、調査方針 (research_brief)、そして作成者エージェント (creater_agent) への具体的な指示を決定します。
-3.  **作業の指示**: 要件が確定したら、`prepare_team_agent` と `reviewer_agent` からなる `member_agents` に作業を開始するように指示します。
-4.  **最終成果物の確認と報告**: `reviewer_agent` からの完了報告を受け取り、生成されたエージェントのコード (agent.py) を確認します。その後、ユーザーに対して「作成したもの」「使い方」「調整できる点」を含む納品報告を行います。
-
-要するに、ユーザーが「こんなエージェントを作りたい」と言えば、私がそのアイデアを具体的な仕様に落とし込み、エージェントの作成を監督し、最終的にユーザーに完成品を報告する役割を担います。
+...
 ```
+
+
+### RESTAPIの場合
+
+
+```
+ACCESS_TOKEN=$(gcloud auth print-access-token)
+LOCATION=your_location
+AGENT_RESOURCE_NAME=your_agent_resource_name
+
+curl -N -X POST \
+  -H "Authorization: Bearer ${ACCESS_TOKEN}" \
+  -H "Content-Type: application/json" \
+  "https://${LOCATION}-aiplatform.googleapis.com/v1/${AGENT_RESOURCE_NAME}:streamQuery" \
+  -d '{
+    "input": {
+      "message": "こんにちは、あなたは何ができますか？",
+      "user_id": "test_user_001"
+     } 
+  }'
+  ```
+
+成功すれば、返答が返ってきます。
