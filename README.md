@@ -232,7 +232,27 @@ a2a_app = to_a2a(root_agent, port=8001, agent_card=my_agent_card)
   ![alt text](assets/image-a2a-4.png)
 
 
+
+## CI/CD ワークフロー
+
+このプロジェクトには、GitHub Actionsを用いた2つの自動化ワークフローが組み込まれています。
+
+### 1. PR作成の自動化 (`gh-pr.yml`)
+Pull Requestを作成する際、AI (Gemini) が変更差分（diff）を読み取り、適切なタイトルと説明文（本文）を自動生成します。
+- **トリガー**: 手動実行 (`workflow_dispatch`)
+- **機能**: Branchを指定して実行すると、AIがコミットログを解析し、「概要」「変更点」「テスト方法」などを含むPRドラフトを作成します。
+
+### 2. リリースの自動化 (`release.yml`)
+`main`ブランチへのマージをトリガーとして、バージョンアップとリリースノート作成を自動で行います。
+- **トリガー**: `main` ブランチへの push
+- **機能**:
+    1. `pyproject.toml` のバージョンを自動インクリメント (patch version up)。
+    2. マージされたPRやコミットログを収集。
+    3. AI (Gemini) がそれらを要約し、「What's New」としてリリースノートを生成。
+    4. GitHub Releaseとタグの自動生成。
+
 # Appendix
+
 以下は、このA4Aを構築した時に用いたコマンドです
 
 ```bash
