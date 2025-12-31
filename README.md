@@ -46,13 +46,10 @@ adk web
 - **[A2Aガイド](docs/a2a_guide.md)** - Agent to Agentプロトコルの詳細
 - **[ADKチュートリアル](docs/adk_tutorial.md)** - ADKエージェントの作り方
 
-### 高度な使い方
+### その他
 
 - **[デプロイメント](docs/deployment.md)** - Agent Engineへのディプロイ方法
 - **[CI/CD](docs/cicd.md)** - GitHub Actionsを使った自動化
-
-### その他
-
 - **[Why A4A?](docs/why_a4a.md)** - A4Aを作った理由と未来への展望
 
 ---
