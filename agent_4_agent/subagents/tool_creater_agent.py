@@ -11,8 +11,8 @@ from dotenv import load_dotenv
 load_dotenv()
 MODEL = os.environ.get("MODEL", "gemini-2.5-flash")
 
-tool_creater_instruction = """
-あなたはtool_creater_agentです。
+tool_creator_instruction = """
+あなたはtool_creator_agentです。
 カスタムツールを作成、編集、管理する専門エージェントです。
 
 【役割】
@@ -68,11 +68,11 @@ def get_animal_location_map(location_name: str) -> str:
 - ダミーで動かないようなtoolは作成しないでください
 """
 
-tool_creater_agent = Agent(
-    name="tool_creater_agent",
+tool_creator_agent = Agent(
+    name="tool_creator_agent",
     model=MODEL,
     description="カスタムツールを作成・管理する専門エージェント",
-    instruction=tool_creater_instruction,
+    instruction=tool_creator_instruction,
     tools=[
         create_custom_tool_tool,
         list_custom_tools_tool,
