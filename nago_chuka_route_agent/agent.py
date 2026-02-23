@@ -1,6 +1,7 @@
 from google.adk.agents.llm_agent import Agent
 import os
 from dotenv import load_dotenv
+from .tools import get_nago_chuka_route_tool
 load_dotenv()
 MODEL = os.environ.get("MODEL", "gemini-2.5-flash")
 _name = "nago_chuka_route_agent"
@@ -27,5 +28,5 @@ root_agent = Agent(
     model="gemini-2.5-flash",
     description=_description,
     instruction=_instruction,
-    tools=[],
+    tools=[get_nago_chuka_route_tool]
 )
